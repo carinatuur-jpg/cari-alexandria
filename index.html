@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cari's Alexandria</title>
+
+<!--
+  ============================================================
+  HOW TO EDIT THIS FILE (Cari, read this first)
+  ============================================================
+  - Every placeholder image is a plain colored block with a class
+    like "ph" (placeholder). To swap one for a real image, add a
+    style such as: style="background-image:url('images/thing.jpg')"
+    or better, edit the matching CSS rule and set background-image
+    there. Search this file for "REPLACE" to find every spot.
+  - The About page text lives near the bottom, inside the element
+    with id="about-text". Just type your text in there.
+  - Fonts, colors, and spacing are all controlled by the CSS
+    variables at the top of the <style> block under :root.
+  ============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* ---- palette (light theme) ---- */
+    --bg:         #fbeef0;   /* page background — soft blush pink */
+    --surface:    #ffffff;   /* cards / panels */
+    --surface-2:  #fdf5f2;   /* secondary surface, overlays */
+    --banner:     #dcedf9;   /* placeholder banner — light blue */
+    --banner-2:   #eaf5fc;
+    --ink:        #2b2530;   /* primary text */
+    --muted:      #8a7f8a;   /* secondary text */
+    --line:       rgba(43,37,48,0.12); /* hairline borders */
+    --gold:       #b8842a;   /* sunlight accent */
+    --teal:       #2f8f83;   /* commissions accent */
+    --rose:       #b8535c;   /* portfolio accent */
+
+    /* ---- type ---- */
+    --f-display: 'Space Grotesk', sans-serif;
+    --f-body:    'IBM Plex Sans', sans-serif;
+    --f-mono:    'IBM Plex Mono', monospace;
+    --f-script:  'Caveat', cursive;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--f-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:var(--f-display); margin:0; letter-spacing:-0.01em;}
+  p{margin:0;}
+  button{font-family:inherit; cursor:pointer;}
+  ::selection{background:var(--gold); color:#fff;}
+
+  .eyebrow{
+    font-family:var(--f-mono);
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ================= ISO CUBE — signature mark ================= */
+  .iso-cube{width:22px; height:22px; display:inline-block; flex:none;}
+  .iso-cube svg{width:100%; height:100%; display:block;}
+
+  /* ================= BANNER ================= */
+  .banner{
+    position:relative;
+    min-height:34vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:2.4rem clamp(1.2rem, 4vw, 3.2rem) 2.6rem;
+    overflow:hidden;
+    /* REPLACE: swap this gradient for background-image:url('your-banner.jpg')
+       and add background-size:cover; background-position:center; */
+    background:
+      radial-gradient(ellipse at 15% 20%, #eef7fd 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 0%, #d8ecfa 0%, transparent 50%),
+      repeating-linear-gradient(135deg, var(--banner) 0 18px, var(--banner-2) 18px 36px);
+    border-bottom:1px solid var(--line);
+  }
+  .banner__tag{
+    display:flex; align-items:center; gap:0.5rem;
+    margin-bottom:0.7rem;
+  }
+  .banner__title{
+    font-size:clamp(2.6rem, 8vw, 5.2rem);
+    font-weight:700;
+    color:var(--ink);
+    line-height:0.95;
+  }
+  .banner__title span{color:var(--gold);}
+  .banner__note{
+    position:absolute; top:1.2rem; right:1.4rem;
+    font-family:var(--f-mono); font-size:0.68rem; color:var(--muted);
+    opacity:0.8; text-align:right; line-height:1.4;
+  }
+
+  /* ================= STAGE (3 panel layout) ================= */
+  .stage{
+    max-width:1180px;
+    margin:0 auto;
+    padding:clamp(2rem,5vw,4rem) clamp(1.2rem,4vw,3.2rem) 5rem;
+    display:grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    gap:clamp(1.2rem, 3vw, 2.4rem);
+    align-items:start;
+  }
+  @media (max-width: 860px){
+    .stage{grid-template-columns:1fr; max-width:520px;}
+    .panel--center{order:-1;}
+  }
+
+  /* ---- side panels (commissions / portfolio) ---- */
+  .panel{
+    background:none;
+    border:none;
+    padding:0;
+    text-align:left;
+    color:inherit;
+    display:block;
+    width:100%;
+  }
+  .panel__frame{
+    position:relative;
+    aspect-ratio: 210 / 297; /* A4-ish, not constrained on small screens */
+    max-height:520px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    overflow:hidden;
+    transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .panel:hover .panel__frame, .panel:focus-visible .panel__frame{
+    transform:translateY(-4px);
+    box-shadow:0 18px 36px -18px rgba(43,37,48,0.28);
+  }
+  .panel--commissions:hover .panel__frame{border-color:var(--teal);}
+  .panel--portfolio:hover .panel__frame{border-color:var(--rose);}
+
+  .panel__thumb{
+    /* REPLACE: this is the exemplary-artwork thumbnail placeholder */
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(45deg, #f1e3e6 0 10px, #f8eeef 10px 20px);
+  }
+  .panel--commissions .panel__thumb{
+    background-image:
+      radial-gradient(circle at 30% 25%, #2f8f8322, transparent 55%),
+      repeating-linear-gradient(45deg, #e7f2f0 0 10px, #f2f8f7 10px 20px);
+  }
+  .panel--portfolio .panel__thumb{
+    background-image:
+      radial-gradient(circle at 70% 25%, #b8535c22, transparent 55%),
+      repeating-linear-gradient(45deg, #f6e9ea 0 10px, #fbf2f3 10px 20px);
+  }
+  .panel__thumb-icon{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-58%);
+    opacity:0.65;
+  }
+  .panel__thumb-icon .iso-cube{width:44px; height:44px;}
+
+  .panel__label{
+    position:absolute; left:0; right:0; bottom:0;
+    padding:0.9rem 1rem 1rem;
+    background:linear-gradient(to top, #ffffffee 40%, transparent);
+    display:flex; align-items:center; justify-content:center; gap:0.5rem;
+  }
+  .panel__label h2{font-size:1.15rem; font-weight:600;}
+  .panel--commissions .panel__label h2{color:var(--teal);}
+  .panel--portfolio .panel__label h2{color:var(--rose);}
+  .panel__arrow{font-family:var(--f-mono); font-size:0.85rem; color:var(--muted);}
+
+  .panel__caption{
+    margin-top:0.6rem;
+    font-size:0.82rem;
+    color:var(--muted);
+    max-width:26ch;
+  }
+
+  /* ---- center panel ---- */
+  .panel--center{
+    display:flex;
+    flex-direction:column;
+  }
+  .center__stack{
+    position:relative;
+    width:100%;
+    aspect-ratio: 210 / 297;
+    max-height:520px;
+    display:grid;
+    grid-template-rows:auto 1fr auto;
+    justify-items:center;
+  }
+
+  .about-btn{
+    justify-self:center;
+    align-self:start;
+    background:var(--gold);
+    color:#fff;
+    border:none;
+    border-radius:999px;
+    padding:0.6rem 1.2rem;
+    font-family:var(--f-mono);
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    font-weight:600;
+    display:flex; align-items:center; gap:0.4rem;
+    box-shadow:0 10px 22px -10px rgba(184,132,42,0.55);
+    transition:transform 0.2s ease;
+  }
+  .about-btn:hover{transform:translateY(-2px) rotate(-1deg);}
+
+  .signature-block{
+    align-self:center;
+    justify-self:center;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.35rem;
+  }
+  .signature{
+    font-family:var(--f-script);
+    font-size:2.8rem;
+    color:var(--gold);
+    line-height:1;
+    transform:rotate(-2deg);
+  }
+  .center__meta{font-size:0.85rem; color:var(--muted);}
+
+  .center__thumb-wrap{
+    align-self:end;
+    justify-self:center;
+    width:50%;
+    min-width:120px;
+    margin-bottom:0.6rem;
+  }
+  .center__frame{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/5;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:
+      radial-gradient(circle at 50% 30%, #f2eaf6 0%, #fbf6f8 70%);
+    overflow:hidden;
+  }
+  .center__frame .ph-icon{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  }
+  .center__frame .ph-icon .iso-cube{width:40px; height:40px; opacity:0.55;}
+  .center__frame-note{
+    position:absolute; bottom:0.5rem; left:0; right:0;
+    text-align:center; font-family:var(--f-mono); font-size:0.6rem;
+    color:var(--muted); opacity:0.8; letter-spacing:0.05em;
+  }
+
+  /* ================= OVERLAYS ================= */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(43,37,48,0.32);
+    backdrop-filter:blur(6px);
+    display:flex; align-items:flex-end; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.25s ease;
+    z-index:50;
+  }
+  .overlay.is-open{opacity:1; pointer-events:auto;}
+  .overlay__panel{
+    width:100%; max-width:1040px;
+    max-height:88vh;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-bottom:none;
+    border-radius:18px 18px 0 0;
+    padding:clamp(1.4rem,4vw,2.6rem);
+    overflow-y:auto;
+    transform:translateY(3%);
+    transition:transform 0.3s ease;
+    box-shadow:0 -20px 50px -20px rgba(43,37,48,0.25);
+  }
+  .overlay.is-open .overlay__panel{transform:translateY(0);}
+
+  .overlay__top{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:1rem; margin-bottom:1.4rem;
+  }
+  .overlay__title{display:flex; align-items:center; gap:0.6rem;}
+  .overlay__title h2{font-size:1.8rem;}
+  .overlay--commissions .overlay__title h2{color:var(--teal);}
+  .overlay--portfolio .overlay__title h2{color:var(--rose);}
+  .overlay--about .overlay__title h2{color:var(--gold);}
+
+  .close-btn{
+    background:var(--surface); border:1px solid var(--line); color:var(--ink);
+    width:38px; height:38px; border-radius:50%; font-size:1.1rem; line-height:1;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .close-btn:hover{border-color:var(--gold); color:var(--gold);}
+
+  /* ---- tabs ---- */
+  .tabs{display:flex; gap:0.6rem; margin-bottom:1.6rem; flex-wrap:wrap;}
+  .tab-btn{
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--muted);
+    padding:0.5rem 1rem;
+    border-radius:999px;
+    font-family:var(--f-mono);
+    font-size:0.75rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    transition:all 0.2s ease;
+  }
+  .overlay--commissions .tab-btn.is-active{background:var(--teal); color:#fff; border-color:var(--teal);}
+  .overlay--portfolio .tab-btn.is-active{background:var(--rose); color:#fff; border-color:var(--rose);}
+
+  /* ---- carousel (commissions) ---- */
+  .carousel{position:relative;}
+  .carousel[hidden]{display:none;}
+  .carousel__viewport{overflow:hidden; border-radius:12px;}
+  .carousel__track{display:flex; transition:transform 0.4s ease;}
+  .card{
+    flex:0 0 100%;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1.2rem;
+    padding:0.2rem;
+  }
+  @media (min-width:640px){
+    .card{grid-template-columns:1fr 1.4fr;}
+  }
+  .card__thumb{
+    aspect-ratio:4/3;
+    border-radius:10px;
+    background:repeating-linear-gradient(45deg, #f1e6e8 0 10px, #f8f0f1 10px 20px);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card__thumb .iso-cube{width:34px; height:34px; opacity:0.6;}
+  .card__body h3{font-size:1.2rem; margin-bottom:0.5rem;}
+  .card__body p{color:var(--muted); font-size:0.92rem; margin-bottom:0.8rem;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:0.4rem;}
+  .chip{
+    font-family:var(--f-mono); font-size:0.68rem; letter-spacing:0.04em;
+    padding:0.28rem 0.6rem; border-radius:999px; border:1px solid var(--line);
+    color:var(--muted);
+  }
+  .badge-shade{
+    display:inline-flex; align-items:center; gap:0.3rem;
+    margin-top:0.7rem; font-family:var(--f-mono); font-size:0.68rem;
+    color:var(--gold);
+  }
+
+  .carousel__controls{
+    display:flex; align-items:center; justify-content:center; gap:1rem;
+    margin-top:1.2rem;
+  }
+  .carousel__nav{
+    background:var(--surface); border:1px solid var(--line); color:var(--ink);
+    width:36px; height:36px; border-radius:50%;
+  }
+  .carousel__nav:hover{border-color:var(--gold); color:var(--gold);}
+  .carousel__dots{display:flex; gap:0.4rem;}
+  .dot{width:7px; height:7px; border-radius:50%; background:var(--line); border:none; padding:0;}
+  .dot.is-active{background:var(--gold);}
+
+  /* ---- portfolio grids ---- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+    gap:1rem;
+  }
+  .tile{
+    aspect-ratio:1/1;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:repeating-linear-gradient(45deg, #f1e6e8 0 10px, #f8f0f1 10px 20px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:0.5rem;
+    padding:0.6rem;
+    text-align:center;
+    color:inherit;
+    width:100%;
+    transition:transform 0.2s ease, border-color 0.2s ease;
+  }
+  .tile:hover{transform:translateY(-3px); border-color:var(--rose);}
+  .tile .iso-cube{width:28px; height:28px; opacity:0.55;}
+  .tile span{font-family:var(--f-mono); font-size:0.65rem; color:var(--muted);}
+
+  /* ---- portfolio project detail view ---- */
+  .detail-back{
+    display:inline-flex; align-items:center; gap:0.4rem;
+    background:var(--surface); border:1px solid var(--line); color:var(--muted);
+    padding:0.45rem 0.9rem; border-radius:999px;
+    font-family:var(--f-mono); font-size:0.72rem; letter-spacing:0.04em;
+    margin-bottom:1.4rem;
+  }
+  .detail-back:hover{border-color:var(--rose); color:var(--rose);}
+  .detail-frame{
+    max-height:70vh;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:repeating-linear-gradient(45deg, #f1e6e8 0 12px, #f8f0f1 12px 24px);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:1.4rem;
+    overflow:hidden;
+  }
+  .detail-frame:empty,
+  .detail-frame:has(.iso-cube){aspect-ratio:16/9; max-height:340px;}
+  .detail-frame .iso-cube{width:48px; height:48px; opacity:0.5;}
+  .detail-title{font-size:1.5rem; margin-bottom:0.7rem;}
+  .detail-desc{color:var(--muted); font-size:0.95rem; line-height:1.6; max-width:60ch; margin-bottom:1.8rem;}
+  .home-btn{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:var(--rose); color:#fff; border:none;
+    padding:0.6rem 1.2rem; border-radius:999px;
+    font-family:var(--f-mono); font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase;
+    font-weight:600;
+  }
+  .home-btn:hover{transform:translateY(-2px);}
+
+  .sub-heading{
+    display:flex; align-items:center; gap:0.5rem;
+    margin:1.8rem 0 0.9rem;
+  }
+  .sub-heading h3{font-size:1rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); font-family:var(--f-mono); font-weight:500;}
+  .sub-heading:first-child{margin-top:0;}
+
+  .book-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.6rem;}
+  .book-list li{
+    display:flex; align-items:center; gap:0.8rem;
+    padding:0.8rem 1rem;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--surface);
+    font-size:0.9rem;
+    color:var(--muted);
+    cursor:pointer;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .book-list li:hover{border-color:var(--rose); transform:translateX(3px);}
+  .book-list li .iso-cube{width:16px; height:16px; opacity:0.6;}
+  .book-list li .book-cover-thumb{
+    width:28px; height:28px; border-radius:4px; object-fit:cover;
+    border:1px solid var(--line); flex:none;
+  }
+
+  /* ---- book gallery (opens when a book is clicked) ---- */
+  .book-gallery__header{
+    display:flex; gap:1.2rem; align-items:flex-start;
+    margin-bottom:1.6rem;
+  }
+  .book-gallery__cover{
+    width:96px; aspect-ratio:210/297; object-fit:cover;
+    border-radius:6px; border:1px solid var(--line); flex:none;
+    box-shadow:0 10px 20px -12px rgba(43,37,48,0.35);
+  }
+  .book-gallery__title{font-size:1.4rem; margin-bottom:0.4rem;}
+  .book-gallery__desc{color:var(--muted); font-size:0.9rem; line-height:1.6; max-width:52ch;}
+  .book-gallery__grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
+    gap:0.9rem;
+  }
+  .book-gallery__tile{
+    aspect-ratio:3/4;
+    border-radius:8px;
+    border:1px solid var(--line);
+    overflow:hidden;
+    padding:0;
+    background:var(--surface);
+    transition:transform 0.2s ease, border-color 0.2s ease;
+  }
+  .book-gallery__tile:hover{transform:translateY(-3px); border-color:var(--rose);}
+  .book-gallery__tile img{width:100%; height:100%; object-fit:cover; display:block;}
+
+  .detail-frame img{max-width:100%; max-height:70vh; width:auto; height:auto; object-fit:contain; display:block; border-radius:12px; margin:0 auto;}
+
+  [data-pane]{display:none;}
+  [data-pane].is-active{display:block;}
+
+  /* ---- about ---- */
+  .about-body{
+    min-height:220px;
+    border:1px dashed var(--line);
+    border-radius:10px;
+    padding:1.4rem;
+    color:var(--muted);
+    font-size:0.95rem;
+    line-height:1.6;
+    background:var(--surface);
+  }
+  .about-photo{
+    width:96px; height:96px; border-radius:50%;
+    border:1px solid var(--line);
+    background:repeating-linear-gradient(45deg, #f1e6e8 0 8px, #f8f0f1 8px 16px);
+    margin-bottom:1.2rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .about-photo .iso-cube{width:24px; height:24px; opacity:0.55;}
+
+  footer{
+    text-align:center; padding:2rem 1rem 3rem;
+    font-family:var(--f-mono); font-size:0.7rem; color:var(--muted); opacity:0.8;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= BANNER ================= -->
+<!-- REPLACE: this whole section is a template hero. Swap the .banner
+     background (see CSS above) for one of your illustrations later. -->
+<header class="banner">
+  <div class="banner__note">portfolio &amp; commissions<br>est. 2026</div>
+  <div class="banner__tag">
+    <span class="iso-cube">
+      <svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#2f8f83"/><polygon points="36,11 20,20 20,38 36,29" fill="#b8535c"/></svg>
+    </span>
+    <span class="eyebrow">Cari — visual artist</span>
+  </div>
+  <h1 class="banner__title">Cari's<br><span>Alexandria</span></h1>
+</header>
+
+<!-- ================= STAGE ================= -->
+<main class="stage">
+
+  <!-- ---- Commissions panel (left) ---- -->
+  <button class="panel panel--commissions" data-open="overlay-commissions">
+    <div class="panel__frame">
+      <div class="panel__thumb">
+        <div class="panel__thumb-icon">
+          <span class="iso-cube">
+            <svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#2f8f83" opacity="0.9"/><polygon points="4,11 20,20 20,38 4,29" fill="#256e65"/><polygon points="36,11 20,20 20,38 36,29" fill="#1c534c"/></svg>
+          </span>
+        </div>
+      </div>
+      <!-- REPLACE: swap .panel__thumb background for your exemplary commission piece -->
+      <div class="panel__label">
+        <h2>Commissions</h2>
+        <span class="panel__arrow">→</span>
+      </div>
+    </div>
+    <p class="panel__caption">Portraits, animals, full-body pieces &amp; more — traditional and digital.</p>
+  </button>
+
+  <!-- ---- Center panel ---- -->
+  <div class="panel panel--center">
+    <div class="center__stack">
+      <button class="about-btn" data-open="overlay-about">
+        <span class="iso-cube" style="width:14px;height:14px;">
+          <svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#fff"/><polygon points="4,11 20,20 20,38 4,29" fill="#fff" opacity="0.6"/><polygon points="36,11 20,20 20,38 36,29" fill="#fff" opacity="0.35"/></svg>
+        </span>
+        About me
+      </button>
+
+      <div class="signature-block">
+        <div class="signature">Cari</div>
+        <p class="center__meta">Illustration · Pixel Art · 3D</p>
+      </div>
+
+      <div class="center__thumb-wrap">
+        <div class="center__frame">
+          <!-- REPLACE: put one of your own artworks here as the centerpiece -->
+          <div class="ph-icon">
+            <span class="iso-cube">
+              <svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg>
+            </span>
+          </div>
+          <div class="center__frame-note">featured artwork</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- Portfolio panel (right) ---- -->
+  <button class="panel panel--portfolio" data-open="overlay-portfolio">
+    <div class="panel__frame">
+      <div class="panel__thumb">
+        <div class="panel__thumb-icon">
+          <span class="iso-cube">
+            <svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c" opacity="0.9"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg>
+          </span>
+        </div>
+      </div>
+      <!-- REPLACE: swap .panel__thumb background for a strong portfolio piece -->
+      <div class="panel__label">
+        <h2>Portfolio</h2>
+        <span class="panel__arrow">→</span>
+      </div>
+    </div>
+    <p class="panel__caption">Digital &amp; traditional work — pixel art, illustration, books, loose pieces.</p>
+  </button>
+
+</main>
+
+<!-- ================= OVERLAY: COMMISSIONS ================= -->
+<div class="overlay overlay--commissions" id="overlay-commissions">
+  <div class="overlay__panel">
+    <div class="overlay__top">
+      <div class="overlay__title">
+        <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#2f8f83"/><polygon points="4,11 20,20 20,38 4,29" fill="#256e65"/><polygon points="36,11 20,20 20,38 36,29" fill="#1c534c"/></svg></span>
+        <h2>Commissions</h2>
+      </div>
+      <button class="close-btn" data-close="overlay-commissions">✕</button>
+    </div>
+
+    <div class="tabs" data-tabgroup="commissions">
+      <button class="tab-btn is-active" data-tab="comm-2d">2D</button>
+      <button class="tab-btn" data-tab="comm-3d">3D</button>
+    </div>
+
+    <!-- ---- 2D carousel ---- -->
+    <div class="carousel" data-pane="comm-2d" data-tabgroup="commissions">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#2f8f83"/><polygon points="4,11 20,20 20,38 4,29" fill="#256e65"/><polygon points="36,11 20,20 20,38 36,29" fill="#1c534c"/></svg></span></div>
+            <div class="card__body">
+              <h3>Graphite portraits</h3>
+              <p>Pencil-rendered portraits with careful tonal shading, from photo reference.</p>
+              <div class="chip-row"><span class="chip">Portraits</span><span class="chip">Animals</span></div>
+              <div class="badge-shade">★ shading-focused</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#2f8f83"/><polygon points="4,11 20,20 20,38 4,29" fill="#256e65"/><polygon points="36,11 20,20 20,38 36,29" fill="#1c534c"/></svg></span></div>
+            <div class="card__body">
+              <h3>Pen &amp; fineliner</h3>
+              <p>Precise linework — portraits, animals, and full-body pieces with a clean, inked look.</p>
+              <div class="chip-row"><span class="chip">Portraits</span><span class="chip">Animals</span><span class="chip">Full-body</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#2f8f83"/><polygon points="4,11 20,20 20,38 4,29" fill="#256e65"/><polygon points="36,11 20,20 20,38 36,29" fill="#1c534c"/></svg></span></div>
+            <div class="card__body">
+              <h3>Paintings</h3>
+              <p>Traditional painted pieces — portraits, animals, or full-body subjects, built up in color.</p>
+              <div class="chip-row"><span class="chip">Portraits</span><span class="chip">Full-body</span></div>
+              <div class="badge-shade">★ shading-focused</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#2f8f83"/><polygon points="4,11 20,20 20,38 4,29" fill="#256e65"/><polygon points="36,11 20,20 20,38 36,29" fill="#1c534c"/></svg></span></div>
+            <div class="card__body">
+              <h3>Digital illustration</h3>
+              <p>Portraits, full-body pieces, and landscapes — landscapes require reference material.</p>
+              <div class="chip-row"><span class="chip">Portraits</span><span class="chip">Full-body</span><span class="chip">Landscapes (ref.)</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#2f8f83"/><polygon points="4,11 20,20 20,38 4,29" fill="#256e65"/><polygon points="36,11 20,20 20,38 36,29" fill="#1c534c"/></svg></span></div>
+            <div class="card__body">
+              <h3>Pixel art</h3>
+              <p>Character and isometric pixel art — portraits, sprites, and scene-based pieces.</p>
+              <div class="chip-row"><span class="chip">Portraits</span><span class="chip">Isometric scenes</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel__controls">
+        <button class="carousel__nav" data-nav="prev">‹</button>
+        <div class="carousel__dots"></div>
+        <button class="carousel__nav" data-nav="next">›</button>
+      </div>
+    </div>
+
+    <!-- ---- 3D carousel ---- -->
+    <div class="carousel" data-pane="comm-3d" data-tabgroup="commissions" hidden>
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span></div>
+            <div class="card__body">
+              <h3>Texture art</h3>
+              <p>Semi-realistic or stylized fantasy surface textures for game-ready assets.</p>
+              <div class="chip-row"><span class="chip">Semi-realistic</span><span class="chip">Fantasy / stylized</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span></div>
+            <div class="card__body">
+              <h3>Low-poly buildings</h3>
+              <p>Solid-edged architectural models built for clean silhouettes and light baking.</p>
+              <div class="chip-row"><span class="chip">Low-poly</span><span class="chip">Buildings</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span></div>
+            <div class="card__body">
+              <h3>Low-poly flora</h3>
+              <p>Trees, bushes, and plant sets styled for game environments.</p>
+              <div class="chip-row"><span class="chip">Low-poly</span><span class="chip">Flora</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span></div>
+            <div class="card__body">
+              <h3>Household objects</h3>
+              <p>Human-scale props with solid, consistent edges — chairs, bags, pens, bikes, and similar.</p>
+              <div class="chip-row"><span class="chip">Low-poly</span><span class="chip">Props</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span></div>
+            <div class="card__body">
+              <h3>Tools</h3>
+              <p>Hand tools and simple mechanical objects modeled at low-poly resolution.</p>
+              <div class="chip-row"><span class="chip">Low-poly</span><span class="chip">Tools</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__thumb"><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span></div>
+            <div class="card__body">
+              <h3>Street furniture</h3>
+              <p>Benches, streetlamps, and other decorative fixtures for environment dressing.</p>
+              <div class="chip-row"><span class="chip">Low-poly</span><span class="chip">Decorative</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel__controls">
+        <button class="carousel__nav" data-nav="prev">‹</button>
+        <div class="carousel__dots"></div>
+        <button class="carousel__nav" data-nav="next">›</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= OVERLAY: PORTFOLIO ================= -->
+<div class="overlay overlay--portfolio" id="overlay-portfolio">
+  <div class="overlay__panel">
+    <div class="overlay__top">
+      <div class="overlay__title">
+        <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span>
+        <h2>Portfolio</h2>
+      </div>
+      <button class="close-btn" data-close="overlay-portfolio">✕</button>
+    </div>
+
+    <div class="tabs" data-tabgroup="portfolio">
+      <button class="tab-btn is-active" data-tab="port-digital">Digital</button>
+      <button class="tab-btn" data-tab="port-traditional">Traditional</button>
+    </div>
+
+    <!-- ---- Digital ---- -->
+    <div data-pane="port-digital" data-tabgroup="portfolio">
+      <!-- REPLACE: each .tile below becomes one artwork. Swap the icon
+           div for a background-image and edit the caption text. -->
+      <div class="grid">
+        <button class="tile" data-project data-title="Sunlight City" data-desc="Isometric pixel art. Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg></span><span>Sunlight City — isometric pixel art</span>
+        </button>
+        <button class="tile" data-project data-title="Salem" data-desc="Global Game Jam piece. Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg></span><span>Salem — game jam piece</span>
+        </button>
+        <button class="tile" data-project data-title="Untitled digital piece" data-desc="Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg></span><span>Untitled — digital piece</span>
+        </button>
+        <button class="tile" data-project data-title="Untitled digital piece" data-desc="Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg></span><span>Untitled — digital piece</span>
+        </button>
+        <button class="tile" data-project data-title="Untitled digital piece" data-desc="Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg></span><span>Untitled — digital piece</span>
+        </button>
+        <button class="tile" data-project data-title="Untitled digital piece" data-desc="Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg></span><span>Untitled — digital piece</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ---- Traditional ---- -->
+    <div data-pane="port-traditional" data-tabgroup="portfolio" hidden>
+      <div class="sub-heading">
+        <span class="iso-cube" style="width:14px;height:14px;"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span>
+        <h3>Books</h3>
+      </div>
+      <!-- REPLACE: list your books here, one <li> each -->
+      <ul class="book-list">
+        <li data-book="pink-book"><img class="book-cover-thumb" src="images/pink-book/cover.jpg" alt="The Pink Book cover"> The Pink Book</li>
+        <li data-project data-title="Untitled Book II" data-desc="Replace this with a synopsis, format, and length for this book."><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span> Untitled Book II</li>
+        <li data-project data-title="Untitled Book III" data-desc="Replace this with a synopsis, format, and length for this book."><span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span> Untitled Book III</li>
+      </ul>
+
+      <div class="sub-heading">
+        <span class="iso-cube" style="width:14px;height:14px;"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span>
+        <h3>Loose works</h3>
+      </div>
+      <!-- REPLACE: paintings, sketches, clay work — anything not in a book -->
+      <div class="grid">
+        <button class="tile" data-project data-title="Painting" data-desc="Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span><span>Painting</span>
+        </button>
+        <button class="tile" data-project data-title="Sketch" data-desc="Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span><span>Sketch</span>
+        </button>
+        <button class="tile" data-project data-title="Sketch" data-desc="Replace this with a real description — medium, size, year, and the story behind the piece.">
+          <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span><span>Sketch</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ---- Book gallery (opens when a book is clicked; shows its pages) ---- -->
+    <div class="portfolio-detail" data-pane="port-book-gallery" data-tabgroup="portfolio" hidden>
+      <button class="detail-back" data-book-gallery-back>‹ Back to portfolio</button>
+      <div class="book-gallery__header">
+        <img class="book-gallery__cover" data-book-gallery-cover src="" alt="">
+        <div>
+          <h3 class="book-gallery__title" data-book-gallery-title>Book title</h3>
+          <p class="book-gallery__desc" data-book-gallery-desc>Book description.</p>
+        </div>
+      </div>
+      <div class="book-gallery__grid" data-book-gallery-grid></div>
+    </div>
+
+    <!-- ---- Project detail (opens when a piece is clicked) ---- -->
+    <div class="portfolio-detail" data-pane="port-detail" data-tabgroup="portfolio" hidden>
+      <button class="detail-back" data-detail-back>‹ Back to portfolio</button>
+      <div class="detail-frame" data-detail-frame>
+        <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span>
+      </div>
+      <!-- REPLACE: swap .detail-frame for a real image once you have one -->
+      <h3 class="detail-title" data-detail-title>Project title</h3>
+      <p class="detail-desc" data-detail-desc>Description placeholder.</p>
+      <button class="home-btn" data-close="overlay-portfolio">🏠 Return to home</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= OVERLAY: ABOUT ================= -->
+<div class="overlay overlay--about" id="overlay-about">
+  <div class="overlay__panel">
+    <div class="overlay__top">
+      <div class="overlay__title">
+        <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg></span>
+        <h2>About me</h2>
+      </div>
+      <button class="close-btn" data-close="overlay-about">✕</button>
+    </div>
+
+    <div class="about-photo">
+      <!-- REPLACE: swap for a real photo/avatar if you'd like one -->
+      <span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8842a"/><polygon points="4,11 20,20 20,38 4,29" fill="#8f6720"/><polygon points="36,11 20,20 20,38 36,29" fill="#70521a"/></svg></span>
+    </div>
+
+    <!-- ============================================================
+         Cari: write your about-me text here. This is intentionally
+         left mostly empty so you can fill it in yourself.
+         ============================================================ -->
+    <div class="about-body" id="about-text">
+      Your about-me text goes here.
+    </div>
+
+  </div>
+</div>
+
+<footer>Cari's Alexandria · made with Claude</footer>
+
+<script>
+  // ---------- overlays ----------
+  document.querySelectorAll('[data-open]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-open');
+      document.getElementById(id).classList.add('is-open');
+    });
+  });
+  document.querySelectorAll('[data-close]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-close');
+      document.getElementById(id).classList.remove('is-open');
+    });
+  });
+  document.querySelectorAll('.overlay').forEach(function(ov){
+    ov.addEventListener('click', function(e){
+      if(e.target === ov) ov.classList.remove('is-open');
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      document.querySelectorAll('.overlay.is-open').forEach(function(ov){
+        ov.classList.remove('is-open');
+      });
+    }
+  });
+
+  // ---------- tabs ----------
+  var lastActivePane = {}; // remembers which tab was open per group, for the detail "back" button
+
+  function showPane(group, target){
+    var panes = document.querySelectorAll('[data-tabgroup="' + group + '"][data-pane]');
+    panes.forEach(function(p){
+      var isTarget = p.getAttribute('data-pane') === target;
+      p.hidden = !isTarget;
+      p.classList.toggle('is-active', isTarget);
+    });
+  }
+
+  document.querySelectorAll('.tabs').forEach(function(tabgroup){
+    var group = tabgroup.getAttribute('data-tabgroup');
+    var buttons = tabgroup.querySelectorAll('.tab-btn');
+    lastActivePane[group] = buttons[0] ? buttons[0].getAttribute('data-tab') : null;
+
+    buttons.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var target = btn.getAttribute('data-tab');
+        buttons.forEach(function(b){ b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        lastActivePane[group] = target;
+        showPane(group, target);
+      });
+    });
+  });
+
+  // ---------- book data (sketchbooks shown as a clickable gallery) ----------
+  // REPLACE / extend: add more books here as you photograph them.
+  var bookData = {
+    'pink-book': {
+      title: 'The Pink Book',
+      desc: 'A working sketchbook — character studies, anatomy practice, and quick observational drawings.',
+      cover: 'images/pink-book/cover.jpg',
+      pages: [
+        { src: 'images/pink-book/bomber.jpg', title: 'Bomber' },
+        { src: 'images/pink-book/sketch-1.jpg', title: 'Sketch 1' },
+        { src: 'images/pink-book/sharks-and-crocodiles.jpg', title: 'Sharks and Crocodiles' },
+        { src: 'images/pink-book/ogre.jpg', title: 'Ogre' },
+        { src: 'images/pink-book/light-work.jpg', title: 'Light work' },
+        { src: 'images/pink-book/hulk-anatomy.jpg', title: 'Hulk anatomy' },
+        { src: 'images/pink-book/tree.jpg', title: 'Tree' },
+        { src: 'images/pink-book/sketch-5.jpg', title: 'Sketch 5' },
+        { src: 'images/pink-book/sketch-4.jpg', title: 'Sketch 4' },
+        { src: 'images/pink-book/portrait-1.jpg', title: 'Portrait 1' },
+        { src: 'images/pink-book/light-work-2.jpg', title: 'Light work 2' },
+        { src: 'images/pink-book/wilbert.jpg', title: 'Wilbert' },
+        { src: 'images/pink-book/leaf.jpg', title: 'Leaf (flipped view too)' }
+      ]
+    }
+  };
+
+  // ---------- portfolio project detail ---------- 
+  var detailBackTarget = 'port-digital'; // where the single-image detail pane's back button returns to
+
+  function openDetail(title, desc, imgSrc, backTarget){
+    document.querySelector('[data-detail-title]').textContent = title;
+    document.querySelector('[data-detail-desc]').textContent = desc || '';
+    var frame = document.querySelector('[data-detail-frame]');
+    if(imgSrc){
+      frame.innerHTML = '<img src="' + imgSrc + '" alt="' + title.replace(/"/g,'&quot;') + '">';
+    } else {
+      frame.innerHTML = '<span class="iso-cube"><svg viewBox="0 0 40 40"><polygon points="20,2 36,11 20,20 4,11" fill="#b8535c"/><polygon points="4,11 20,20 20,38 4,29" fill="#943f47"/><polygon points="36,11 20,20 20,38 36,29" fill="#743136"/></svg></span>';
+    }
+    detailBackTarget = backTarget || (lastActivePane['portfolio'] || 'port-digital');
+    showPane('portfolio', 'port-detail');
+  }
+
+  document.querySelectorAll('[data-project]').forEach(function(item){
+    if(item.tagName !== 'BUTTON'){
+      item.setAttribute('tabindex', '0');
+      item.setAttribute('role', 'button');
+      item.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); item.click(); }
+      });
+    }
+    item.addEventListener('click', function(){
+      var title = item.getAttribute('data-title') || 'Untitled';
+      var desc = item.getAttribute('data-desc') || '';
+      openDetail(title, desc, null, lastActivePane['portfolio'] || 'port-digital');
+    });
+  });
+  var detailBack = document.querySelector('[data-detail-back]');
+  if(detailBack){
+    detailBack.addEventListener('click', function(){
+      showPane('portfolio', detailBackTarget);
+    });
+  }
+
+  // ---------- book gallery (click a book -> see its pages; click a page -> full view) ----------
+  document.querySelectorAll('[data-book]').forEach(function(li){
+    li.setAttribute('tabindex', '0');
+    li.setAttribute('role', 'button');
+    li.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); li.click(); }
+    });
+    li.addEventListener('click', function(){
+      var key = li.getAttribute('data-book');
+      var book = bookData[key];
+      if(!book) return;
+
+      document.querySelector('[data-book-gallery-title]').textContent = book.title;
+      document.querySelector('[data-book-gallery-desc]').textContent = book.desc || '';
+      var coverEl = document.querySelector('[data-book-gallery-cover]');
+      coverEl.src = book.cover;
+      coverEl.alt = book.title + ' cover';
+
+      var grid = document.querySelector('[data-book-gallery-grid]');
+      grid.innerHTML = '';
+      book.pages.forEach(function(page){
+        var tile = document.createElement('button');
+        tile.className = 'book-gallery__tile';
+        tile.innerHTML = '<img src="' + page.src + '" alt="' + page.title.replace(/"/g,'&quot;') + '">';
+        tile.addEventListener('click', function(){
+          openDetail(page.title, book.title, page.src, 'port-book-gallery');
+        });
+        grid.appendChild(tile);
+      });
+
+      showPane('portfolio', 'port-book-gallery');
+    });
+  });
+  var bookGalleryBack = document.querySelector('[data-book-gallery-back]');
+  if(bookGalleryBack){
+    bookGalleryBack.addEventListener('click', function(){
+      showPane('portfolio', lastActivePane['portfolio'] || 'port-traditional');
+    });
+  }
+  // reset the portfolio overlay back to the grid view every time it's opened fresh
+  document.querySelectorAll('[data-open="overlay-portfolio"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      showPane('portfolio', lastActivePane['portfolio'] || 'port-digital');
+    });
+  });
+
+  // ---------- carousels ----------
+  document.querySelectorAll('.carousel').forEach(function(carousel){
+    var track = carousel.querySelector('.carousel__track');
+    var cards = carousel.querySelectorAll('.card');
+    var dotsWrap = carousel.querySelector('.carousel__dots');
+    var index = 0;
+
+    cards.forEach(function(_, i){
+      var dot = document.createElement('button');
+      dot.className = 'dot' + (i === 0 ? ' is-active' : '');
+      dot.addEventListener('click', function(){ goTo(i); });
+      dotsWrap.appendChild(dot);
+    });
+
+    function goTo(i){
+      index = (i + cards.length) % cards.length;
+      track.style.transform = 'translateX(-' + (index * 100) + '%)';
+      dotsWrap.querySelectorAll('.dot').forEach(function(d, di){
+        d.classList.toggle('is-active', di === index);
+      });
+    }
+
+    carousel.querySelector('[data-nav="next"]').addEventListener('click', function(){ goTo(index + 1); });
+    carousel.querySelector('[data-nav="prev"]').addEventListener('click', function(){ goTo(index - 1); });
+  });
+</script>
+
+</body>
+</html>
