@@ -339,6 +339,49 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
 
 :focus-visible{outline:2px solid var(--rose); outline-offset:2px;}
 .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
+
+/* ---- prints ---- */
+.prints{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.2rem; margin-top:2.4rem;
+}
+.printcard{
+  border:1px solid var(--line); background:var(--paper-2);
+  padding:1.6rem 1.4rem; text-align:center;
+}
+.printcard__size{
+  font-family:var(--display); font-size:2.4rem; line-height:1;
+  color:var(--rose);
+}
+.printcard__dim{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--graphite-soft); margin:.5rem 0 1rem;
+}
+.printcard__price{
+  font-family:var(--display); font-size:1.5rem; margin:0 0 .7rem;
+}
+.printcard__note{ font-size:.86rem; color:var(--graphite); margin:0; }
+.prints__ship{
+  margin-top:1.6rem; font-size:.9rem; color:var(--graphite);
+  border-top:1px solid var(--line); padding-top:1.2rem;
+}
+
+.paying{
+  margin-top:2.4rem; border:1px solid var(--line);
+  background:var(--paper-2); padding:1.8rem;
+}
+.paying h3{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--graphite); margin:0 0 1.2rem;
+  font-weight:600;
+}
+.paying__steps{ margin:0; padding-left:1.2rem; }
+.paying__steps li{ margin-bottom:.7rem; font-size:.92rem; line-height:1.6; }
+.paying__steps strong{ font-weight:600; }
+.paying__note{
+  margin:1.2rem 0 0; padding-top:1rem; border-top:1px solid var(--line);
+  font-size:.85rem; color:var(--graphite);
+}
 </style>
 </head>
 <body>
@@ -349,6 +392,7 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
     <div class="nav__links">
       <a href="#commissions">Commissions</a>
       <a href="#work">The drawings</a>
+      <a href="#prints">Prints</a>
       <a href="#process">How it works</a>
       <a href="#guestbook">Guestbook</a>
       <a href="#order" class="nav__cta">Request a drawing</a>
@@ -534,6 +578,65 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
   </div>
 </section>
 
+<section class="section" id="prints">
+  <div class="wrap">
+    <div class="section__head reveal">
+      <p class="eyebrow">Prints</p>
+      <h2>Take a drawing home</h2>
+      <p>Drawings from the sketchbooks, printed properly on heavy paper. Each one
+         is printed after you order it, signed on the back, and posted flat.
+         Nothing is mass produced &mdash; if you want one, I make one.</p>
+    </div>
+
+    <div class="prints">
+      <!-- >>> EDIT: prices below. Get a quote from your print shop first,
+           then set these so each sale clears at least three times the cost. -->
+      <div class="printcard reveal">
+        <div class="printcard__size">A4</div>
+        <p class="printcard__dim">21 &times; 29.7 cm</p>
+        <p class="printcard__price">&euro;25</p>
+        <p class="printcard__note">Fits a standard frame. Posted flat in a board envelope.</p>
+      </div>
+      <div class="printcard reveal">
+        <div class="printcard__size">A3</div>
+        <p class="printcard__dim">29.7 &times; 42 cm</p>
+        <p class="printcard__price">&euro;40</p>
+        <p class="printcard__note">The one to pick if the drawing has fine detail.</p>
+      </div>
+      <div class="printcard reveal">
+        <div class="printcard__size">Two or more</div>
+        <p class="printcard__dim">any sizes</p>
+        <p class="printcard__price">&minus;15%</p>
+        <p class="printcard__note">Posted together, so you only pay postage once.</p>
+      </div>
+    </div>
+
+    <p class="prints__ship reveal">
+      Postage &euro;4.95 within the Netherlands, &euro;9.95 elsewhere in Europe.
+      Tell me which drawing you want in the form below &mdash; every plate in the
+      sketchbooks is available.
+    </p>
+
+    <div class="paying reveal">
+      <h3>How paying works</h3>
+      <ol class="paying__steps">
+        <li><strong>You send the form.</strong> Nothing is charged and you are not
+            committed to anything yet.</li>
+        <li><strong>I reply with the exact price</strong> including postage, and a
+            date. If it is a commission I confirm what I can do before you pay.</li>
+        <li><strong>You pay by Tikkie or bank transfer.</strong> I send you a link;
+            it opens in your own banking app. Prints are paid in full. Commissions
+            are half up front, half when you have seen the finished drawing.</li>
+        <li><strong>It goes in the post</strong>, and I send you the tracking code.</li>
+      </ol>
+      <p class="paying__note">
+        No account needed, no card details go anywhere near this website. If a
+        commission goes wrong at my end before I start, you get the deposit back.
+      </p>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="order">
   <div class="wrap">
     <div class="section__head reveal">
@@ -578,12 +681,13 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
           <div class="field">
             <label for="f-subject">What should I draw?</label>
             <select id="f-subject" name="subject_type">
-              <option>Animals &amp; pets</option>
-              <option>People &amp; portraits</option>
+              <option>A new drawing of my animal or pet</option>
+              <option>A new drawing of a person</option>
+              <option>A print of a drawing you already made</option>
               <option>Something else</option>
             </select>
           </div>
-          <div class="field">
+          <div class="field" data-commission-only>
             <label for="f-tier">Detail level</label>
             <select id="f-tier" name="tier">
               <option>Line study</option>
@@ -595,13 +699,35 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
           </div>
         </div>
 
-        <div class="field">
+        <div class="field" data-print-only hidden>
+          <label for="f-plate">Which drawing?</label>
+          <select id="f-plate" name="plate"></select>
+        </div>
+
+        <div class="field__row" data-print-only hidden>
+          <div class="field">
+            <label for="f-size">Print size</label>
+            <select id="f-size" name="print_size">
+              <option>A4 — €25</option>
+              <option>A3 — €40</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-qty">How many</label>
+            <select id="f-qty" name="quantity">
+              <option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5 or more</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field" data-commission-only>
           <label for="f-file">Upload your reference photo</label>
           <input id="f-file" name="attachment" type="file" accept="image/*" multiple>
           <p class="form__note" style="margin-top:0.4rem;">JPG or PNG, up to about 4 MB each.</p>
         </div>
 
-        <div class="field">
+        <div class="field" data-commission-only>
           <label for="f-photo">…or paste a link instead</label>
           <input id="f-photo" name="reference_link" type="url" placeholder="Imgur, Google Drive, Dropbox…">
         </div>
@@ -810,6 +936,51 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
   });
 
   /* ---------- order form ---------- */
+
+  /* ---------- print orders ----------------------------------------------
+     The drawing list is built from the same BOOKS object the shelf uses, so
+     photographing a new sketchbook adds its plates here automatically.       */
+  (function(){
+    var subject = $('#f-subject');
+    var plate   = $('#f-plate');
+    if(!subject || !plate) return;
+
+    // fill the drawing dropdown from every book
+    Object.keys(BOOKS).forEach(function(slug){
+      var book = BOOKS[slug];
+      var group = document.createElement('optgroup');
+      group.label = book.title;
+      book.plates.forEach(function(p){
+        var o = document.createElement('option');
+        o.textContent = p[1] + ' — ' + book.title;
+        group.appendChild(o);
+      });
+      plate.appendChild(group);
+    });
+
+    function sync(){
+      var isPrint = subject.value.indexOf('print') !== -1;
+      document.querySelectorAll('[data-print-only]').forEach(function(el){
+        el.hidden = !isPrint;
+      });
+      document.querySelectorAll('[data-commission-only]').forEach(function(el){
+        el.hidden = isPrint;
+      });
+      var subjLabel = document.querySelector('label[for="f-subject"]');
+      if(subjLabel){
+        subjLabel.textContent = isPrint ? 'What would you like?' : 'What should I draw?';
+      }
+      var brief = $('#f-brief');
+      if(brief){
+        brief.placeholder = isPrint
+          ? 'Anything you want me to know — who it is for, a deadline, whether you want it signed to someone.'
+          : 'Who or what is in the photo, whether it is a gift, any deadline, anything you want emphasised.';
+      }
+    }
+    subject.addEventListener('change', sync);
+    sync();
+  })();
+
   var form   = $('[data-order-form]');
   var status = $('[data-form-status]');
 
