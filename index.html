@@ -3,14 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cari's Alexandria — hand-drawn portraits &amp; animal studies</title>
-<meta name="description" content="Hand-drawn graphite and ink portraits of people and animals, made to order from your photo. Sketchbooks open to view.">
+<title>Hand-drawn pet portraits &amp; commissions from your photo | Cari's Alexandria</title>
+<meta name="description" content="Custom pencil portraits of pets and people, drawn by hand from your photo. Commissions from \u20ac35 and signed prints from \u20ac25. Based in Nijmegen, posted anywhere.">
 
 <meta property="og:title" content="Cari's Alexandria — hand-drawn portraits &amp; animal studies">
 <meta property="og:description" content="Send a photo, get a drawing. Graphite and ink portraits of people and pets.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="images/green-mouse-thumb.jpg">
+<meta property="og:image" content="https://carinatuur-jpg.github.io/cari-alexandria/images/social-card.jpg">
+<meta property="og:url" content="https://carinatuur-jpg.github.io/cari-alexandria/">
+<meta name="twitter:card" content="summary_large_image">
 
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23E7E5DF'/%3E%3Ctext x='50' y='72' font-family='Georgia,serif' font-size='68' fill='%23A8636B' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#E7E5DF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -339,6 +343,42 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
 
 /* A CSS display rule beats the HTML hidden attribute, so .field__row
    (display:grid) would stay visible when hidden. This forces it. */
+
+/* ---- sticky mobile order bar ----
+   Someone arriving from TikTok is on a phone and scrolling fast. This keeps
+   the price and the order button one thumb-tap away at all times. It only
+   appears after they scroll past the hero, so it never covers the opening. */
+.mobar{
+  position:fixed; left:0; right:0; bottom:0; z-index:50;
+  display:none; align-items:center; justify-content:space-between; gap:0.8rem;
+  padding:0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
+  background:rgba(231,229,223,0.97); backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+  transform:translateY(110%); transition:transform 0.25s ease;
+}
+.mobar.is-up{transform:none;}
+.mobar__price{line-height:1.2;}
+.mobar__price strong{font-family:var(--display); font-size:1.15rem; display:block;}
+.mobar__price span{
+  font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--graphite-soft);
+}
+.mobar .btn{padding:0.7rem 1.2rem; white-space:nowrap;}
+@media (max-width:760px){
+  .mobar{display:flex;}
+  body{padding-bottom:4.5rem;}
+}
+
+
+/* On a phone the hero drawing is tall and mostly paper, which pushed the
+   commissions and prices far down the page. Crop it to a sensible band so
+   the first screen still gets to the point. */
+@media (max-width:880px){
+  .hero .plate img{
+    max-height:52vh; width:100%; object-fit:cover; object-position:center 22%;
+  }
+}
+
 [hidden]{display:none !important;}
 
 :focus-visible{outline:2px solid var(--rose); outline-offset:2px;}
@@ -387,6 +427,25 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
   font-size:.85rem; color:var(--graphite);
 }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Cari's Alexandria",
+  "description": "Hand-drawn graphite and ink portraits of people and animals, made to order from your photo.",
+  "url": "https://carinatuur-jpg.github.io/cari-alexandria/",
+  "email": "nhkrijnsen@gmail.com",
+  "areaServed": { "@type": "Country", "name": "Netherlands" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Nijmegen", "addressCountry": "NL" },
+  "priceRange": "\u20ac25-\u20ac240",
+  "makesOffer": [
+    { "@type": "Offer", "name": "Pet portrait commission", "priceCurrency": "EUR", "price": "35" },
+    { "@type": "Offer", "name": "Portrait commission", "priceCurrency": "EUR", "price": "40" },
+    { "@type": "Offer", "name": "Art print", "priceCurrency": "EUR", "price": "25" }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -425,7 +484,7 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
       </div>
     </div>
     <figure class="plate reveal">
-      <img src="images/green-mouse.jpg" alt="Detailed graphite drawing of a mouse grooming itself">
+      <img src="images/green-mouse-hero.jpg" width="1200" height="1500" fetchpriority="high" alt="Detailed graphite drawing of a mouse grooming itself">
       <figcaption class="plate__cap"><span>Mouse</span><span>Graphite</span></figcaption>
     </figure>
   </div>
@@ -448,7 +507,7 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
 
     <div class="lanes">
       <article class="lane reveal">
-        <div class="lane__img"><img src="images/green-chimp.jpg" alt="Graphite study of a young chimpanzee"></div>
+        <div class="lane__img"><img src="images/green-chimp-thumb.jpg" loading="lazy" width="520" height="650" alt="Graphite study of a young chimpanzee"></div>
         <div class="lane__body">
           <p class="eyebrow">Lane one</p>
           <h3>Animals &amp; pets</h3>
@@ -480,7 +539,7 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
       </article>
 
       <article class="lane reveal">
-        <div class="lane__img"><img src="images/pink-portrait-1.jpg" alt="Graphite portrait study of a person"></div>
+        <div class="lane__img"><img src="images/pink-portrait-1-thumb.jpg" loading="lazy" width="520" height="650" alt="Graphite portrait study of a person"></div>
         <div class="lane__body">
           <p class="eyebrow">Lane two</p>
           <h3>People &amp; portraits</h3>
@@ -551,12 +610,12 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
 
     <div class="shelf">
       <button class="book reveal" data-book="pink-book" style="--spine:#A8636B;">
-        <span class="book__cover"><img src="images/pink-cover-thumb.jpg" alt="Cover of the pink sketchbook"></span>
+        <span class="book__cover"><img src="images/pink-cover-thumb.jpg" loading="lazy" width="520" height="650" alt="Cover of the pink sketchbook"></span>
         <span class="book__meta"><strong>The Pink Book</strong><span>13 plates · pen &amp; pencil</span></span>
       </button>
 
       <button class="book reveal" data-book="green-book" style="--spine:#7C8A70;">
-        <span class="book__cover"><img src="images/green-cover-thumb.jpg" alt="Cover of the green sketchbook"></span>
+        <span class="book__cover"><img src="images/green-cover-thumb.jpg" loading="lazy" width="520" height="650" alt="Cover of the green sketchbook"></span>
         <span class="book__meta"><strong>The Green Book</strong><span>11 plates · graphite</span></span>
       </button>
 
@@ -787,6 +846,15 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
   </div>
 </footer>
 
+
+<div class="mobar" id="mobar">
+  <div class="mobar__price">
+    <strong>From &euro;35</strong>
+    <span>Drawings &middot; prints from &euro;25</span>
+  </div>
+  <a href="#order" class="btn btn--solid">Order</a>
+</div>
+
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Drawing viewer">
   <div class="lb__top">
     <span data-lb-count>—</span>
@@ -885,7 +953,7 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
       b.className = 'plate-btn';
       b.type = 'button';
       b.innerHTML =
-        '<img src="' + p.thumb + '" loading="lazy" alt="' + p.title.replace(/"/g,'&quot;') + '">' +
+        '<img src="' + p.thumb + '" loading="lazy" width="520" height="650" alt="' + p.title.replace(/"/g,'&quot;') + '">' +
         '<span class="plate-btn__cap"><b>' + p.title + '</b><span>' + p.medium + '</span></span>';
       b.addEventListener('click', function(){ openLb(i); });
       platesEl.appendChild(b);
@@ -1047,6 +1115,30 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
       say('That didn\u2019t send. Email me directly and I\u2019ll pick it up from there.', false);
     }).then(function(){ btn.disabled = false; });
   });
+
+
+  /* ---------- sticky mobile bar: show once past the hero ---------- */
+  (function(){
+    var bar = $('#mobar'), orderSec = $('#order');
+    if(!bar || !orderSec) return;
+
+    function paint(){
+      var pastHero   = window.scrollY > 500;
+      var r          = orderSec.getBoundingClientRect();
+      // The form counts as "in view" once its top reaches the lower half of
+      // the screen — no point offering an Order button over the order form.
+      var formInView = r.top < window.innerHeight * 0.75 && r.bottom > 0;
+      bar.classList.toggle('is-up', pastHero && !formInView);
+    }
+
+    window.addEventListener('scroll', paint, { passive:true });
+    window.addEventListener('resize', paint);
+    // Lazy images change the page height after the last scroll event, which
+    // would otherwise leave the bar stuck in a stale state.
+    window.addEventListener('load', paint);
+    setInterval(paint, 500);
+    paint();
+  })();
 
   /* ---------- reveal on scroll ---------- */
   if('IntersectionObserver' in window){
