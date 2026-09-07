@@ -665,7 +665,7 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
            email app addressed to you. Replace every
            nhkrijnsen@gmail.com in this file too.
            ============================================================ -->
-      <form class="form reveal" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" enctype="multipart/form-data" data-order-form>
+      <form class="form reveal" action="https://formspree.io/f/xvkowgvz" method="POST" enctype="multipart/form-data" data-order-form>
         <div class="field__row">
           <div class="field">
             <label for="f-name">Your name</label>
@@ -721,15 +721,17 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
           </div>
         </div>
 
-        <div class="field" data-commission-only>
+        <!-- Upload field is disabled: Formspree's free plan rejects file
+             uploads, and a submission carrying one fails silently. Re-enable
+             by removing hidden/disabled once on a paid plan. -->
+        <div class="field" data-commission-only hidden>
           <label for="f-file">Upload your reference photo</label>
-          <input id="f-file" name="attachment" type="file" accept="image/*" multiple>
-          <p class="form__note" style="margin-top:0.4rem;">JPG or PNG, up to about 4 MB each.</p>
+          <input id="f-file" name="attachment" type="file" accept="image/*" multiple disabled data-keep-disabled>
         </div>
 
         <div class="field" data-commission-only>
-          <label for="f-photo">…or paste a link instead</label>
-          <input id="f-photo" name="reference_link" type="url" placeholder="Imgur, Google Drive, Dropbox…">
+          <label for="f-photo">Link to your reference photo</label>
+          <input id="f-photo" name="reference_link" type="url" placeholder="Google Drive, Dropbox, WeTransfer…">
         </div>
 
         <div class="field">
@@ -960,12 +962,21 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
 
     function sync(){
       var isPrint = subject.value.indexOf('print') !== -1;
-      document.querySelectorAll('[data-print-only]').forEach(function(el){
-        el.hidden = !isPrint;
-      });
-      document.querySelectorAll('[data-commission-only]').forEach(function(el){
-        el.hidden = isPrint;
-      });
+      function toggle(sel, hide){
+        document.querySelectorAll(sel).forEach(function(el){
+          el.hidden = hide;
+          // A hidden field is still sent by FormData, so disable it too —
+          // otherwise a print order arrives carrying empty commission fields.
+          el.querySelectorAll('input, select, textarea').forEach(function(f){
+            // The file input stays permanently disabled — see the comment on
+            // the upload field. Don't let the toggle switch it back on.
+            if(f.hasAttribute('data-keep-disabled')) return;
+            f.disabled = hide;
+          });
+        });
+      }
+      toggle('[data-print-only]', !isPrint);
+      toggle('[data-commission-only]', isPrint);
       var subjLabel = document.querySelector('label[for="f-subject"]');
       if(subjLabel){
         subjLabel.textContent = isPrint ? 'What would you like?' : 'What should I draw?';
