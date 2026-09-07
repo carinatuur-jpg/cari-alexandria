@@ -337,6 +337,10 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
 .reveal.is-in{opacity:1; transform:none;}
 @media (prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none;} }
 
+/* A CSS display rule beats the HTML hidden attribute, so .field__row
+   (display:grid) would stay visible when hidden. This forces it. */
+[hidden]{display:none !important;}
+
 :focus-visible{outline:2px solid var(--rose); outline-offset:2px;}
 .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
 
@@ -648,7 +652,7 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
       <aside class="order__aside reveal">
         <p>You're not paying anything yet. This just starts the conversation — I'll reply with a price and a date before any work begins.</p>
         <ul>
-          <li>Link your reference photo — Google Drive, Dropbox or WeTransfer. Higher resolution is better.</li>
+          <li>Attach or link your reference photo. Higher resolution is better.</li>
           <li>Tell me if it's a gift and when you need it by.</li>
           <li>Ask for something unusual if you want — I'd rather try it than not.</li>
         </ul>
@@ -724,7 +728,7 @@ button.book:hover,button.book:focus-visible{transform:translateY(-8px);}
         <!-- Upload field is disabled: Formspree's free plan rejects file
              uploads, and a submission carrying one fails silently. Re-enable
              by removing hidden/disabled once on a paid plan. -->
-        <div class="field" data-commission-only hidden>
+        <div class="field" hidden>
           <label for="f-file">Upload your reference photo</label>
           <input id="f-file" name="attachment" type="file" accept="image/*" multiple disabled data-keep-disabled>
         </div>
